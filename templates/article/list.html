@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}
+    首页
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="row mt-2">
+            {% for article in articles %}
+                <div class="col-4 mb-4">
+                    <div class="card h-100">
+                        <h4 class="card-header">{{ article.title }}</h4>
+                        <div class="card-body">
+                            <p class="card-text">{{ article.body|slice:'100' }}</p>
+                        </div>
+                        <div class="card-footer">
+                            <a class="btn btn-primary" href="{% url 'article:article_detail' article.id %}">阅读本文</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="pagination row">
+    <div class="m-auto">
+        <span class="step-links">
+            <!-- 如果不是第一页，则显示上翻按钮 -->
+            {% if articles.has_previous %}
+                <a href="?page=1" class="btn btn-success">
+                    &laquo; 1
+                </a>
+                <span>...</span>
+                <a href="?page={{ articles.previous_page_number }}"
+                   class="btn btn-secondary"
+                >
+                    {{ articles.previous_page_number }}
+                </a>
+            {% endif %}
+            <!-- 当前页面 -->
+            <span class="current btn btn-danger btn-lg">
+                {{ articles.number }}
+            </span>
+            <!-- 如果不是最末页，则显示下翻按钮 -->
+            {% if articles.has_next %}
+                <a href="?page={{ articles.next_page_number }}"
+                   class="btn btn-secondary"
+                >
+                    {{ articles.next_page_number }}
+                </a>
+                <span>...</span>
+                <a href="?page={{ articles.paginator.num_pages }}"
+                   class="btn btn-success"
+                >
+                    {{ articles.paginator.num_pages }} &raquo;
+                </a>
+            {% endif %}
+        </span>
+    </div>
+</div>
+{% endblock %}
